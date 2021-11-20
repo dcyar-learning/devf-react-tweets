@@ -5,10 +5,20 @@ import './App.css';
 import FeedPage from './pages/FeedPage';
 
 function App() {
-  const [username, setUsername] = useState('')
-  const [tweets, setTweets] = useState([])
+  let localStorageTweets = []
 
-  const tweetHandler = (tweet) => setTweets([tweet, ...tweets])
+  if (localStorage.getItem('tweets'))
+    localStorageTweets = JSON.parse(localStorage.getItem('tweets'));
+  else
+    localStorage.setItem('tweets', JSON.stringify([]));
+
+  const [username, setUsername] = useState('')
+  const [tweets, setTweets] = useState(localStorageTweets)
+
+  const tweetHandler = (tweet) => {
+    localStorage.setItem('tweets', JSON.stringify([tweet, ...tweets]))
+    setTweets([tweet, ...tweets])
+  }
 
   const loginHandler = (username) => setUsername(username);
 
