@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import React, { useState } from 'react'
+import MainLayout from './layouts/MainLayout';
+import LoginPage from './pages/LoginPage';
 import './App.css';
+import FeedPage from './pages/FeedPage';
 
 function App() {
+  const [username, setUsername] = useState('')
+  const [tweets, setTweets] = useState([])
+
+  const tweetHandler = (tweet) => setTweets([tweet, ...tweets])
+
+  const loginHandler = (username) => setUsername(username);
+
+  const logoutHandler = () => setUsername('')
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MainLayout>
+        {
+          !username.length
+            ? <LoginPage handleLogin={loginHandler} handleLogout={logoutHandler} />
+            : <FeedPage username={username} tweets={tweets} handleLogout={logoutHandler} tweetHandler={tweetHandler} />
+        }
+      </MainLayout>
     </div>
   );
 }
